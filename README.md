@@ -97,7 +97,7 @@ sku-management/
 
 ```bash
 # 1. Clone o repositório
-git clone <seu-repositorio-url>
+git clone https://github.com/PabloCGSilva/sku-management-boticario.git
 cd sku-management
 
 # 2. Execute o script de inicialização (Windows)
