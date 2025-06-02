@@ -251,6 +251,3 @@ src/
 ---
 
 ### *Desenvolvido como parte do desafio técnico para Pessoa Desenvolvedora Fullstack II - Grupo Boticário*
-
-```markdown
-
