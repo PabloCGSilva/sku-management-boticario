@@ -303,13 +303,12 @@ npm run build
 
 ## 📞 Contato
 
-**Desenvolvedor**: [Seu Nome]
-**Email**: [seu-email@example.com]
-**LinkedIn**: [seu-linkedin]
+**Desenvolvedor**: [Pablo C G Silva]
+**Email**: [pablo.carlos.silva@outlook.com]
+**LinkedIn**: [https://www.linkedin.com/in/pablo-carlos-silva/]
 
 ---
 
 ### Desenvolvido como parte do desafio técnico para Pessoa Desenvolvedora Fullstack II - Grupo Boticário
 
 ```markdown
-This comprehensive README covers all requirements and demonstrates professional documentation practices!
