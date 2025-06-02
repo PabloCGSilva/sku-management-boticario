@@ -1,7 +1,3 @@
-Perfect! Let's create comprehensive documentation.
-
-**Create the main `README.md` in the root (`sku-management/README.md`):**
-
 ```markdown
 # Sistema de Gestão de SKUs - Grupo Boticário
 
