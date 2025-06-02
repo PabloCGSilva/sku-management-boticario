@@ -1,14 +1,14 @@
-```markdown
+
 # Sistema de Gestão de SKUs - Grupo Boticário
 
 Sistema completo para gerenciamento de SKUs com fluxo de estados e regras de negócio específicas.
 
 ## 🚀 Demonstração
 
-- **Frontend**: http://localhost:3000
-- **API**: http://localhost:3001
-- **Documentação API (Swagger)**: http://localhost:3001/api-docs
-- **Health Check**: http://localhost:3001/health
+- **Frontend**: <http://localhost:3000>0>
+- **API**: <http://localhost:3001>
+- **Documentação API (Swagger)**: <http://localhost:3001/api-docs>
+- **Health Check**: <http://localhost:3001/health>
 
 ## 📋 Sobre o Projeto
 
@@ -27,16 +27,15 @@ Este projeto implementa um sistema de gestão de SKUs com as seguintes funcional
 
 ### Distributed Microservices Architecture
 
-```
-
+```markdown
 sku-management/
 ├── sku-api/          # Backend API (Node.js + TypeScript)
 ├── sku-web/          # Frontend Web (React + TypeScript)
 └── README.md
-
-```text
+```
 
 **Decisão Arquitetural**: Optei por uma arquitetura distribuída com serviços separados para demonstrar conhecimento em:
+
 - Microserviços independentes
 - Deployments separados
 - Separação de responsabilidades
@@ -45,6 +44,7 @@ sku-management/
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend (sku-api)
+
 - **Runtime**: Node.js 18+
 - **Linguagem**: TypeScript
 - **Framework**: Express.js
@@ -57,6 +57,7 @@ sku-management/
 - **Containerização**: Docker + Docker Compose
 
 ### Frontend (sku-web)
+
 - **Framework**: React 18
 - **Linguagem**: TypeScript
 - **Build Tool**: Vite
@@ -67,6 +68,7 @@ sku-management/
 - **Roteamento**: React Router DOM
 
 ### DevOps & Qualidade
+
 - **Containerização**: Docker
 - **Testes**: Jest (Unit + Integration)
 - **Linting**: ESLint + Prettier
@@ -85,7 +87,8 @@ sku-management/
 ## 🚀 Como Executar
 
 ### Pré-requisitos
-- Node.js 18+ 
+
+- Node.js 18+
 - Docker e Docker Compose
 - Git
 
@@ -98,8 +101,6 @@ cd sku-management
 
 # 2. Execute o script de inicialização (Windows)
 start-all.bat
-
-# Ou execute manualmente:
 ```
 
 ### Execução Manual
@@ -135,19 +136,6 @@ npm install
 npm run dev
 ```
 
-### Execução com Docker (Recomendado)
-
-```bash
-# Backend
-cd sku-api
-docker-compose up --build -d
-
-# Frontend  
-cd sku-web
-npm install
-npm run dev
-```
-
 ## 🧪 Executar Testes
 
 ### Backend
@@ -165,13 +153,6 @@ npm run test:integration
 npm run test:all
 ```
 
-### Frontend
-
-```bash
-cd sku-web
-npm test
-```
-
 ## 📡 API Endpoints
 
 ### Principais Endpoints
@@ -185,9 +166,7 @@ npm test
 | DELETE | `/api/skus/:id` | Remove SKU |
 | GET | `/health` | Health check |
 
-### Documentação Completa
-
-Acesse: <http://localhost:3001/api-docs>
+**Documentação Completa**: <http://localhost:3001/api-docs>
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -221,7 +200,6 @@ Acesse: <http://localhost:3001/api-docs>
 3. **React Query**: Cache inteligente, sincronização automática
 4. **Material-UI**: Design system consistente, acessibilidade
 5. **Docker**: Ambiente consistente, fácil deployment
-6. **Jest**: Testing framework robusto, boa cobertura
 
 ### Padrões Aplicados
 
@@ -229,7 +207,6 @@ Acesse: <http://localhost:3001/api-docs>
 - **State Machine**: Controle rigoroso de transições de estado
 - **Repository Pattern**: Abstração da camada de dados
 - **Error Handling**: Tratamento centralizado de erros
-- **Validation Layer**: Validação em múltiplas camadas
 
 ## 🔧 Configuração do Ambiente
 
@@ -242,15 +219,11 @@ NODE_ENV=development
 CORS_ORIGIN="http://localhost:3000"
 ```
 
-### Configuração do Banco
-
-O banco é criado automaticamente via Docker. O schema é aplicado automaticamente via Prisma.
-
 ## 📊 Estrutura do Projeto
 
-### Backend (sku-api)
+### Backend structure (sku-api)
 
-```text
+```markdown
 src/
 ├── controllers/     # Controladores da API
 ├── services/        # Lógica de negócio
@@ -262,9 +235,9 @@ src/
 └── index.ts         # Entrada da aplicação
 ```
 
-### Frontend (sku-web)
+### Frontend structure (sku-web)
 
-```text
+```markdown
 src/
 ├── components/      # Componentes reutilizáveis
 ├── pages/           # Páginas da aplicação
@@ -275,40 +248,9 @@ src/
 └── App.tsx          # Componente principal
 ```
 
-## 🚀 Deploy em Produção
-
-### Backend Deployment
-
-```bash
-cd sku-api
-docker build -t sku-api .
-docker run -p 3001:3001 sku-api
-```
-
-### Frontend Deployment
-
-```bash
-cd sku-web
-npm run build
-# Servir pasta dist/ com nginx ou similar
-```
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📞 Contato
-
-**Desenvolvedor**: [Pablo C G Silva]
-**Email**: [pablo.carlos.silva@outlook.com]
-**LinkedIn**: [https://www.linkedin.com/in/pablo-carlos-silva/]
-
 ---
 
-### Desenvolvido como parte do desafio técnico para Pessoa Desenvolvedora Fullstack II - Grupo Boticário
+### *Desenvolvido como parte do desafio técnico para Pessoa Desenvolvedora Fullstack II - Grupo Boticário*
 
 ```markdown
+
