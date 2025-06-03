@@ -151,13 +151,6 @@ router.post('/', validateRequest({ body: CreateSKUSchema }), SKUController.creat
 
 ---
 
-## 📄 **Updated Installation Section for README**
-
-Replace the current "Como Executar" section with this enhanced version:
-
-```markdown
----
-
 ## 🚀 Como Executar
 
 ### Pré-requisitos
