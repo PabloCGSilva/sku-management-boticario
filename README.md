@@ -4,10 +4,10 @@ Sistema completo para gerenciamento de SKUs com fluxo de estados e regras de neg
 
 ## 🚀 Demonstração
 
-- **Frontend**: http://localhost:3000
-- **API**: http://localhost:3001
-- **Documentação API (Swagger)**: http://localhost:3001/api-docs
-- **Health Check**: http://localhost:3001/health
+- **Frontend**: <http://localhost:3000>
+- **API**: <http://localhost:3001>
+- **Documentação API (Swagger)**: <http://localhost:3001/api-docs>
+- **Health Check**: <http://localhost:3001/health>
 
 ---
 
@@ -30,10 +30,10 @@ Este projeto implementa um sistema de gestão de SKUs com **arquitetura profissi
 
 ### Distributed Microservices Architecture
 
-```
+```architecture
 sku-management/
-├── sku-api/          # Backend API (Node.js + TypeScript)
-├── sku-web/          # Frontend Web (React + TypeScript)
+├── sku-api/          # Backend API (Node.js + TypeScript)
+├── sku-web/          # Frontend Web (React + TypeScript)
 └── README.md
 ```
 
@@ -73,7 +73,7 @@ sku-management/
 
 - **Containerização**: Docker
 - **Testes**: Jest (Unit + Integration)
-- **Linting**: ESLint + Prettier  
+- **Linting**: ESLint + Prettier  
 - **Type Safety**: TypeScript strict mode
 
 ---
@@ -87,7 +87,6 @@ sku-management/
 | **ATIVO** | `DESATIVADO` | Nenhum | Nenhuma alteração permitida |
 | **DESATIVADO** | `ATIVO`, `PRÉ-CADASTRO` | Nenhum | Nenhuma alteração permitida |
 | **CANCELADO** | Nenhum | Nenhum | Status definitivo |
-
 
 ## 📄 **Part 3: Enterprise Refactoring & Installation (Fixed)**
 
@@ -107,11 +106,12 @@ class NotFoundError extends AppError { statusCode = 404; }
 ```
 
 - **Códigos HTTP corretos** para cada tipo de erro
-- **Classificação de erros** operacionais vs técnicos  
+- **Classificação de erros** operacionais vs técnicos  
 - **Contexto estruturado** para debugging
 - **Logging centralizado** com correlation IDs
 
 #### 2. Middleware de Validação Centralizado
+
 ```typescript
 // Validação automática antes dos controllers
 router.post('/', validateRequest({ body: CreateSKUSchema }), SKUController.create);
@@ -122,18 +122,20 @@ router.post('/', validateRequest({ body: CreateSKUSchema }), SKUController.creat
 - **Type safety** completa nos controllers
 
 #### 3. Formato de Resposta Padronizado
+
 ```json
 {
-  "success": true,
-  "data": { },
-  "message": "SKU created successfully",
-  "meta": {
-    "timestamp": "2024-01-15T10:30:00.000Z"
-  }
+  "success": true,
+  "data": { },
+  "message": "SKU created successfully",
+  "meta": {
+    "timestamp": "2024-01-15T10:30:00.000Z"
+  }
 }
 ```
 
 #### 4. Documentação Swagger Avançada
+
 - **Schemas reutilizáveis** para respostas de erro
 - **Exemplos detalhados** para todos endpoints
 - **Códigos de erro específicos** (VALIDATION_ERROR, BUSINESS_RULE_VIOLATION)
@@ -201,7 +203,6 @@ npm install
 npm run dev
 ```
 
-
 ---
 
 ## 📡 API Endpoints
@@ -217,36 +218,35 @@ npm run dev
 | `DELETE` | `/api/skus/:id` | Remove SKU | CUID format validation |
 | `GET` | `/health` | Health check | Dependency status |
 
-**📖 Documentação Completa**: http://localhost:3001/api-docs
+**📖 Documentação Completa**: <http://localhost:3001/api-docs>
 
 ### Exemplo de Resposta de Erro
 
 ```json
 {
-  "success": false,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Validation failed: description is required",
-    "details": {
-      "details": [
-        {
-          "field": "description",
-          "message": "String must contain at least 1 character(s)",
-          "code": "too_small"
-        }
-      ],
-      "totalErrors": 1
-    }
-  },
-  "meta": {
-    "timestamp": "2024-01-15T10:30:00.000Z",
-    "path": "/api/skus",
-    "method": "POST",
-    "requestId": "req_123456789"
-  }
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed: description is required",
+    "details": {
+      "details": [
+        {
+          "field": "description",
+          "message": "String must contain at least 1 character(s)",
+          "code": "too_small"
+        }
+      ],
+      "totalErrors": 1
+    }
+  },
+  "meta": {
+    "timestamp": "2024-01-15T10:30:00.000Z",
+    "path": "/api/skus",
+    "method": "POST",
+    "requestId": "req_123456789"
+  }
 }
 ```
-
 
 ## 🧪 Cobertura de Testes
 
@@ -270,10 +270,12 @@ npm run test:unit
 ```
 
 **Arquivos testados:**
+
 - `test/unit.test.js` - Testes básicos de configuração
 - `test/simple.test.ts` - Validações de tipos e schemas
 
 **Cobertura:**
+
 - ✅ Validação de schemas Zod
 - ✅ Tipos TypeScript
 - ✅ Configuração do ambiente
@@ -288,6 +290,7 @@ npm run test:integration
 **Arquivo:** `test/integration.test.js`
 
 **Cobertura:**
+
 - ✅ **CRUD completo** - Create, Read, Update, Delete
 - ✅ **Regra especial** - Alteração de descrição comercial
 - ✅ **Validação de campos** - Permissões por status
@@ -295,9 +298,10 @@ npm run test:integration
 - ✅ **Fluxo end-to-end** - Criação → Transição → Validação
 
 **Cenários testados:**
-```
+
+```test
 ✅ Criação de SKU com status inicial PRE_CADASTRO
-✅ Transição PRE_CADASTRO → CADASTRO_COMPLETO  
+✅ Transição PRE_CADASTRO → CADASTRO_COMPLETO  
 ✅ Regra: commercialDescription em CADASTRO_COMPLETO → PRE_CADASTRO
 ✅ Validação de permissões de edição por status
 ✅ Validação de transições inválidas
@@ -314,59 +318,65 @@ npm run test:state-machine
 **Cobertura completa das regras de negócio do desafio técnico:**
 
 ##### 3.1 Estado PRE_CADASTRO
+
 - ✅ Permite editar: `DESCRIÇÃO`, `DESCRIÇÃO_COMERCIAL`, `SKU`
 - ✅ Transições válidas: `CADASTRO_COMPLETO`, `CANCELADO`
 - ✅ Valida todas as combinações de campos editáveis
 
 ##### 3.2 Estado CADASTRO_COMPLETO
+
 - ✅ Permite editar: **apenas** `DESCRIÇÃO_COMERCIAL`
 - ✅ Regra especial: alteração retorna para `PRE_CADASTRO`
 - ✅ Transições válidas: `PRE_CADASTRO`, `ATIVO`, `CANCELADO`
 - ✅ Bloqueia edição de outros campos
 
 ##### 3.3 Estado ATIVO
+
 - ✅ **Nenhuma edição permitida** - todos os campos bloqueados
 - ✅ Transição válida: apenas `DESATIVADO`
 - ✅ Valida rejeição de alterações de campos
 
 ##### 3.4 Estado DESATIVADO
-- ✅ **Nenhuma edição permitida** - todos os campos bloqueados  
+
+- ✅ **Nenhuma edição permitida** - todos os campos bloqueados  
 - ✅ Transições válidas: `ATIVO`, `PRE_CADASTRO`
 - ✅ Valida rejeição de alterações de campos
 
 ##### 3.5 Estado CANCELADO
+
 - ✅ **Status definitivo** - nenhuma alteração permitida
 - ✅ **Nenhuma transição válida** - estado final
 - ✅ Valida rejeição total de mudanças
 
 ##### 3.6 Validações de Transições Inválidas
+
 - ✅ Bloqueia transições não permitidas
 - ✅ Retorna erros `422 BUSINESS_RULE_VIOLATION`
 - ✅ Mensagens específicas por violação
 
 ### 🎖️ Qualidade dos Testes
 
-#### Padrões Profissionais Implementados:
+#### Padrões Profissionais Implementados
 
 1. **Isolamento de Testes**
-   - Cada teste cria seus próprios dados
-   - Cleanup automático após execução
-   - Sem dependências entre testes
+   - Cada teste cria seus próprios dados
+   - Cleanup automático após execução
+   - Sem dependências entre testes
 
 2. **Cobertura de Edge Cases**
-   - Todas as transições de estado possíveis
-   - Validação de campos por status
-   - Cenários de erro e sucesso
+   - Todas as transições de estado possíveis
+   - Validação de campos por status
+   - Cenários de erro e sucesso
 
 3. **Validação de Regras de Negócio**
-   - 100% das regras do desafio técnico
-   - Casos especiais documentados
-   - Comportamentos específicos validados
+   - 100% das regras do desafio técnico
+   - Casos especiais documentados
+   - Comportamentos específicos validados
 
 4. **Assertions Robustas**
-   - Validação de códigos HTTP corretos
-   - Verificação de estrutura de resposta
-   - Contexto detalhado em falhas
+   - Validação de códigos HTTP corretos
+   - Verificação de estrutura de resposta
+   - Contexto detalhado em falhas
 
 ### 📈 Métricas de Cobertura
 
@@ -376,14 +386,15 @@ npm run test:all
 
 # Resultado esperado:
 ✅ Testes Unitários: 100% dos utilitários
-✅ Testes de Integração: 100% dos endpoints  
+✅ Testes de Integração: 100% dos endpoints  
 ✅ Testes de State Machine: 100% das regras de negócio
 ✅ Total: 17+ cenários validados
 ```
 
 ### 🚀 Executando os Testes
 
-#### Pré-requisitos
+#### Pré-requisitos para Execução de Testes
+
 - API rodando em `http://localhost:3001`
 - Banco de dados PostgreSQL ativo
 - Dependências instaladas (`npm install`)
@@ -405,7 +416,9 @@ npm run test:all
 ```
 
 #### CI/CD Ready
+
 Os testes estão preparados para integração contínua:
+
 - ✅ **Determinísticos** - resultados consistentes
 - ✅ **Rápidos** - execução em menos de 10s
 - ✅ **Informativos** - mensagens claras de erro
@@ -486,28 +499,28 @@ CORS_ORIGIN="http://localhost:3000"
 
 ```
 src/
-├── controllers/     # Controladores da API (apenas orquestração)
-├── services/        # Lógica de negócio e regras
-├── models/          # Definições de tipos e schemas Zod
-├── routes/          # Definição das rotas com validação
-├── middleware/      # Middlewares (validation, errorHandler)
-├── errors/          # Hierarquia de erros customizada
-├── utils/           # Utilitários e helpers
-├── config/          # Configurações (Swagger, etc)
-└── index.ts         # Entrada da aplicação
+├── controllers/     # Controladores da API (apenas orquestração)
+├── services/        # Lógica de negócio e regras
+├── models/          # Definições de tipos e schemas Zod
+├── routes/          # Definição das rotas com validação
+├── middleware/      # Middlewares (validation, errorHandler)
+├── errors/          # Hierarquia de erros customizada
+├── utils/           # Utilitários e helpers
+├── config/          # Configurações (Swagger, etc)
+└── index.ts         # Entrada da aplicação
 ```
 
 ### Frontend structure (sku-web)
 
 ```
 src/
-├── components/      # Componentes reutilizáveis
-├── pages/           # Páginas da aplicação
-├── hooks/           # Custom hooks (React Query)
-├── services/        # Cliente da API
-├── types/           # Definições de tipos TypeScript
-├── utils/           # Utilitários e validações
-└── App.tsx          # Componente principal
+├── components/      # Componentes reutilizáveis
+├── pages/           # Páginas da aplicação
+├── hooks/           # Custom hooks (React Query)
+├── services/        # Cliente da API
+├── types/           # Definições de tipos TypeScript
+├── utils/           # Utilitários e validações
+└── App.tsx          # Componente principal
 ```
 
 ---
@@ -525,4 +538,3 @@ Este projeto demonstra conhecimento através de:
 - **Testing Strategy**: Cobertura completa de regras de negócio
 
 ---
-
