@@ -20,7 +20,6 @@ import { ArrowBack, Lock, Edit } from '@mui/icons-material'
 import { useSKU, useCreateSKU, useUpdateSKU } from '../hooks/useSKUs'
 import { createSKUSchema, CreateSKUFormData } from '../utils/validation'
 
-// Business rules for field permissions
 const getFieldPermissions = (status?: string) => {
     switch (status) {
         case 'PRE_CADASTRO':
@@ -94,7 +93,6 @@ const SKUForm: React.FC = () => {
     const createSKU = useCreateSKU()
     const updateSKU = useUpdateSKU()
 
-    // Calculate field permissions based on current status
     const permissions = useMemo(() =>
         getFieldPermissions(sku?.status),
         [sku?.status]
@@ -131,7 +129,6 @@ const SKUForm: React.FC = () => {
     const onSubmit = async (data: CreateSKUFormData & { status?: string }) => {
         try {
             if (isEditing && id) {
-                // Only send editable fields
                 const updateData: any = {}
 
                 if (permissions.description) updateData.description = data.description
@@ -151,7 +148,6 @@ const SKUForm: React.FC = () => {
 
     if (isLoadingSKU && isEditing) return <CircularProgress />
 
-    // Check if commercial description changed (triggers special rule)
     const commercialDescriptionChanged = isEditing &&
         sku?.status === 'CADASTRO_COMPLETO' &&
         watchedCommercialDescription !== sku?.commercialDescription

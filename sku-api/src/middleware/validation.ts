@@ -22,7 +22,7 @@ export const validateRequest = (schema: {
 
             next();
         } catch (error) {
-            next(error); // Let error handler deal with ZodError
+            next(error);
         }
     };
 };

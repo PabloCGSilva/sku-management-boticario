@@ -61,7 +61,6 @@ const statusTransitions = {
     [SKUStatus.CANCELADO]: [],
 }
 
-// Business rules for what actions are allowed per status
 const getActionPermissions = (status: SKUStatus) => {
     switch (status) {
         case SKUStatus.PRE_CADASTRO:

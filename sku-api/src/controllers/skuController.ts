@@ -1,9 +1,7 @@
-// src/controllers/skuController.ts
 import { Request, Response, NextFunction } from 'express';
 import { SKUService } from '../services/skuService';
 import { logger } from '../utils/logger';
 
-// Standardized response format
 class ResponseFormatter {
   static success<T>(data: T, message?: string) {
     return {
@@ -23,7 +21,7 @@ export class SKUController {
       const sku = await SKUService.create(req.body);
       res.status(201).json(ResponseFormatter.success(sku, 'SKU created successfully'));
     } catch (error) {
-      next(error); // Let error middleware handle it
+      next(error);
     }
   }
 

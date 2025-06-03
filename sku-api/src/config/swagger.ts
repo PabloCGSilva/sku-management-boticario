@@ -123,7 +123,6 @@ const swaggerDefinition: SwaggerDefinition = {
                     }
                 }
             },
-            // Standardized Success Response
             SuccessResponse: {
                 type: 'object',
                 properties: {
@@ -153,7 +152,6 @@ const swaggerDefinition: SwaggerDefinition = {
                     }
                 }
             },
-            // Error Response Base
             ErrorResponse: {
                 type: 'object',
                 properties: {
@@ -209,7 +207,6 @@ const swaggerDefinition: SwaggerDefinition = {
                     }
                 }
             },
-            // Legacy Error (for backward compatibility)
             Error: {
                 type: 'object',
                 properties: {
@@ -370,7 +367,7 @@ const swaggerDefinition: SwaggerDefinition = {
 
 const options = {
     definition: swaggerDefinition,
-    apis: ['./src/routes/*.ts', './src/controllers/*.ts'], // Paths to files with OpenAPI definitions
+    apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

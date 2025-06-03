@@ -1,4 +1,3 @@
-// src/routes/skuRoutes.ts
 import { Router } from 'express';
 import { SKUController } from '../controllers/skuController';
 import { validateRequest } from '../middleware/validation';
@@ -7,7 +6,6 @@ import { z } from 'zod';
 
 const router = Router();
 
-// Validation schemas for params and query
 const ParamsSchema = z.object({
     id: z.string().cuid('Invalid ID format')
 });

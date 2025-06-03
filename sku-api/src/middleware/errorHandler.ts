@@ -1,4 +1,3 @@
-// src/middleware/errorHandler.ts
 import { Request, Response, NextFunction } from 'express';
 import { AppError, ValidationError } from '../errors';
 import { logger } from '../utils/logger';
@@ -27,25 +26,21 @@ export const errorHandler = (
 ): void => {
   const requestId = req.headers['x-request-id'] as string || 'unknown';
 
-  // Handle Zod validation errors specifically
   if (error instanceof ZodError) {
     const validationError = ValidationError.fromZodError(error);
     handleAppError(validationError, req, res, requestId);
     return;
   }
 
-  // Handle our custom application errors
   if (error instanceof AppError) {
     handleAppError(error, req, res, requestId);
     return;
   }
 
-  // Handle unexpected errors
   handleUnexpectedError(error, req, res, requestId);
 };
 
 function handleAppError(error: AppError, req: Request, res: Response, requestId: string) {
-  // Log operational errors as warnings, others as errors
   const logLevel = error.statusCode < 500 ? 'warn' : 'error';
 
   logger[logLevel]('Operational error occurred', {
@@ -78,7 +73,6 @@ function handleAppError(error: AppError, req: Request, res: Response, requestId:
 }
 
 function handleUnexpectedError(error: Error, req: Request, res: Response, requestId: string) {
-  // Log unexpected errors with full context
   logger.error('Unexpected error occurred', {
     error: error.message,
     stack: error.stack,

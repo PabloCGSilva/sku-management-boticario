@@ -2,7 +2,7 @@ import { AppError } from './AppError';
 
 export class ValidationError extends AppError {
   readonly statusCode = 400;
-  readonly errorCode = 'VALIDATION_ERROR'; // Make sure this matches the abstract property
+  readonly errorCode = 'VALIDATION_ERROR';
 
   constructor(
     message: string,
