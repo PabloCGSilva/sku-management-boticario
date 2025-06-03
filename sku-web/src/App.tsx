@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Typography, Box } from '@mui/material'
 import SKUList from './pages/SKUList'

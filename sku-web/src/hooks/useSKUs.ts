@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { skuApi } from '../services/api'
-import { CreateSKUData, UpdateSKUData } from '../types'
+import { UpdateSKUData } from '../types'
 
 export const useSKUs = () => {
     return useQuery({

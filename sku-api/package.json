@@ -8,7 +8,8 @@
     "test": "jest",
     "test:unit": "jest test/unit.test.js test/simple.test.ts",
     "test:integration": "jest test/integration.test.js",
-    "test:all": "npm run test:unit && npm run test:integration",
+    "test:state-machine": "jest test/sku-state-machine.test.js",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:state-machine",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev"

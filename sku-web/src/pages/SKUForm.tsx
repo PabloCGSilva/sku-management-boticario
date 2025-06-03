@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,11 +9,81 @@ import {
     Paper,
     TextField,
     Alert,
-    CircularProgress
+    CircularProgress,
+    Chip,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
 } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, Lock, Edit } from '@mui/icons-material'
 import { useSKU, useCreateSKU, useUpdateSKU } from '../hooks/useSKUs'
 import { createSKUSchema, CreateSKUFormData } from '../utils/validation'
+
+// Business rules for field permissions
+const getFieldPermissions = (status?: string) => {
+    switch (status) {
+        case 'PRE_CADASTRO':
+            return {
+                description: true,
+                commercialDescription: true,
+                sku: true,
+                canChangeStatus: true,
+                allowedStatuses: ['CADASTRO_COMPLETO', 'CANCELADO']
+            }
+        case 'CADASTRO_COMPLETO':
+            return {
+                description: false,
+                commercialDescription: true,
+                sku: false,
+                canChangeStatus: true,
+                allowedStatuses: ['ATIVO', 'CANCELADO']
+            }
+        case 'ATIVO':
+            return {
+                description: false,
+                commercialDescription: false,
+                sku: false,
+                canChangeStatus: true,
+                allowedStatuses: ['DESATIVADO']
+            }
+        case 'DESATIVADO':
+            return {
+                description: false,
+                commercialDescription: false,
+                sku: false,
+                canChangeStatus: true,
+                allowedStatuses: ['ATIVO', 'PRE_CADASTRO']
+            }
+        case 'CANCELADO':
+            return {
+                description: false,
+                commercialDescription: false,
+                sku: false,
+                canChangeStatus: false,
+                allowedStatuses: []
+            }
+        default:
+            return {
+                description: true,
+                commercialDescription: true,
+                sku: true,
+                canChangeStatus: false,
+                allowedStatuses: []
+            }
+    }
+}
+
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case 'PRE_CADASTRO': return 'warning'
+        case 'CADASTRO_COMPLETO': return 'info'
+        case 'ATIVO': return 'success'
+        case 'DESATIVADO': return 'default'
+        case 'CANCELADO': return 'error'
+        default: return 'default'
+    }
+}
 
 const SKUForm: React.FC = () => {
     const navigate = useNavigate()
@@ -24,12 +94,19 @@ const SKUForm: React.FC = () => {
     const createSKU = useCreateSKU()
     const updateSKU = useUpdateSKU()
 
+    // Calculate field permissions based on current status
+    const permissions = useMemo(() =>
+        getFieldPermissions(sku?.status),
+        [sku?.status]
+    )
+
     const {
         control,
         handleSubmit,
         reset,
+        watch,
         formState: { errors, isSubmitting }
-    } = useForm<CreateSKUFormData>({
+    } = useForm<CreateSKUFormData & { status?: string }>({
         resolver: zodResolver(createSKUSchema),
         defaultValues: {
             description: '',
@@ -38,20 +115,31 @@ const SKUForm: React.FC = () => {
         }
     })
 
+    const watchedCommercialDescription = watch('commercialDescription')
+
     useEffect(() => {
         if (sku && isEditing) {
             reset({
                 description: sku.description,
                 commercialDescription: sku.commercialDescription,
                 sku: sku.sku,
+                status: sku.status
             })
         }
     }, [sku, reset, isEditing])
 
-    const onSubmit = async (data: CreateSKUFormData) => {
+    const onSubmit = async (data: CreateSKUFormData & { status?: string }) => {
         try {
             if (isEditing && id) {
-                await updateSKU.mutateAsync({ id, data })
+                // Only send editable fields
+                const updateData: any = {}
+
+                if (permissions.description) updateData.description = data.description
+                if (permissions.commercialDescription) updateData.commercialDescription = data.commercialDescription
+                if (permissions.sku) updateData.sku = data.sku
+                if (permissions.canChangeStatus && data.status) updateData.status = data.status
+
+                await updateSKU.mutateAsync({ id, data: updateData })
             } else {
                 await createSKU.mutateAsync(data)
             }
@@ -62,6 +150,11 @@ const SKUForm: React.FC = () => {
     }
 
     if (isLoadingSKU && isEditing) return <CircularProgress />
+
+    // Check if commercial description changed (triggers special rule)
+    const commercialDescriptionChanged = isEditing &&
+        sku?.status === 'CADASTRO_COMPLETO' &&
+        watchedCommercialDescription !== sku?.commercialDescription
 
     return (
         <Box>
@@ -76,7 +169,37 @@ const SKUForm: React.FC = () => {
                 <Typography variant="h4" component="h1">
                     {isEditing ? 'Editar SKU' : 'Novo SKU'}
                 </Typography>
+                {sku?.status && (
+                    <Chip
+                        label={sku.status.replace('_', ' ')}
+                        color={getStatusColor(sku.status) as any}
+                        sx={{ ml: 2 }}
+                    />
+                )}
             </Box>
+
+            {/* Business Rule Warning */}
+            {commercialDescriptionChanged && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                    ⚠️ <strong>Regra de Negócio:</strong> Alterar a descrição comercial em CADASTRO_COMPLETO
+                    retornará o SKU para status PRE_CADASTRO automaticamente.
+                </Alert>
+            )}
+
+            {/* Field Restrictions Info */}
+            {isEditing && sku?.status && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                    <strong>Status atual:</strong> {sku.status.replace('_', ' ')} -
+                    {permissions.description || permissions.commercialDescription || permissions.sku
+                        ? ` Campos editáveis: ${[
+                            permissions.description && 'Descrição',
+                            permissions.commercialDescription && 'Descrição Comercial',
+                            permissions.sku && 'SKU'
+                        ].filter(Boolean).join(', ')}`
+                        : ' Nenhum campo editável neste status'
+                    }
+                </Alert>
+            )}
 
             <Paper sx={{ p: 3 }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -89,8 +212,12 @@ const SKUForm: React.FC = () => {
                                     {...field}
                                     label="Descrição"
                                     fullWidth
+                                    disabled={isEditing && !permissions.description}
                                     error={!!errors.description}
                                     helperText={errors.description?.message}
+                                    InputProps={{
+                                        endAdornment: isEditing && !permissions.description ? <Lock color="disabled" /> : <Edit color="action" />
+                                    }}
                                 />
                             )}
                         />
@@ -103,8 +230,12 @@ const SKUForm: React.FC = () => {
                                     {...field}
                                     label="Descrição Comercial"
                                     fullWidth
+                                    disabled={isEditing && !permissions.commercialDescription}
                                     error={!!errors.commercialDescription}
                                     helperText={errors.commercialDescription?.message}
+                                    InputProps={{
+                                        endAdornment: isEditing && !permissions.commercialDescription ? <Lock color="disabled" /> : <Edit color="action" />
+                                    }}
                                 />
                             )}
                         />
@@ -117,11 +248,40 @@ const SKUForm: React.FC = () => {
                                     {...field}
                                     label="SKU"
                                     fullWidth
+                                    disabled={isEditing && !permissions.sku}
                                     error={!!errors.sku}
                                     helperText={errors.sku?.message}
+                                    InputProps={{
+                                        endAdornment: isEditing && !permissions.sku ? <Lock color="disabled" /> : <Edit color="action" />
+                                    }}
                                 />
                             )}
                         />
+
+                        {/* Status Change (only for editing) */}
+                        {isEditing && permissions.canChangeStatus && permissions.allowedStatuses.length > 0 && (
+                            <Controller
+                                name="status"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl fullWidth>
+                                        <InputLabel>Alterar Status</InputLabel>
+                                        <Select
+                                            {...field}
+                                            label="Alterar Status"
+                                            value={field.value || ''}
+                                        >
+                                            <MenuItem value="">Manter status atual</MenuItem>
+                                            {permissions.allowedStatuses.map(status => (
+                                                <MenuItem key={status} value={status}>
+                                                    {status.replace('_', ' ')}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                        )}
 
                         {(createSKU.isError || updateSKU.isError) && (
                             <Alert severity="error">
@@ -133,7 +293,7 @@ const SKUForm: React.FC = () => {
                             <Button
                                 type="submit"
                                 variant="contained"
-                                disabled={isSubmitting}
+                                disabled={isSubmitting || (isEditing && sku?.status === 'CANCELADO')}
                             >
                                 {isSubmitting ? 'Salvando...' : 'Salvar'}
                             </Button>
