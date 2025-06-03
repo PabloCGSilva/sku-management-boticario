@@ -32,8 +32,8 @@ Este projeto implementa um sistema de gestão de SKUs com **arquitetura profissi
 
 ```architecture
 sku-management/
-├── sku-api/          # Backend API (Node.js + TypeScript)
-├── sku-web/          # Frontend Web (React + TypeScript)
+├── sku-api/          # Backend API (Node.js + TypeScript)
+├── sku-web/          # Frontend Web (React + TypeScript)
 └── README.md
 ```
 
@@ -73,7 +73,7 @@ sku-management/
 
 - **Containerização**: Docker
 - **Testes**: Jest (Unit + Integration)
-- **Linting**: ESLint + Prettier  
+- **Linting**: ESLint + Prettier  
 - **Type Safety**: TypeScript strict mode
 
 ---
@@ -90,7 +90,6 @@ sku-management/
 
 ## 📄 **Part 3: Enterprise Refactoring & Installation (Fixed)**
 
-```markdown
 ---
 
 ## 🎯 Refatoração
@@ -98,6 +97,7 @@ sku-management/
 ### ✨ Melhorias de Arquitetura Implementadas
 
 #### 1. Sistema de Tratamento de Erros
+
 ```typescript
 // Hierarquia de erros customizada
 class ValidationError extends AppError { statusCode = 400; }
@@ -106,11 +106,11 @@ class NotFoundError extends AppError { statusCode = 404; }
 ```
 
 - **Códigos HTTP corretos** para cada tipo de erro
-- **Classificação de erros** operacionais vs técnicos  
+- **Classificação de erros** operacionais vs técnicos  
 - **Contexto estruturado** para debugging
 - **Logging centralizado** com correlation IDs
 
-#### 2. Middleware de Validação Centralizado
+### 2. Middleware de Validação Centralizado
 
 ```typescript
 // Validação automática antes dos controllers
@@ -121,20 +121,20 @@ router.post('/', validateRequest({ body: CreateSKUSchema }), SKUController.creat
 - **Erros padronizados** do Zod
 - **Type safety** completa nos controllers
 
-#### 3. Formato de Resposta Padronizado
+### 3. Formato de Resposta Padronizado
 
 ```json
 {
-  "success": true,
-  "data": { },
-  "message": "SKU created successfully",
-  "meta": {
-    "timestamp": "2024-01-15T10:30:00.000Z"
-  }
+  "success": true,
+  "data": { },
+  "message": "SKU created successfully",
+  "meta": {
+    "timestamp": "2024-01-15T10:30:00.000Z"
+  }
 }
 ```
 
-#### 4. Documentação Swagger Avançada
+### 4. Documentação Swagger Avançada
 
 - **Schemas reutilizáveis** para respostas de erro
 - **Exemplos detalhados** para todos endpoints
@@ -151,6 +151,13 @@ router.post('/', validateRequest({ body: CreateSKUSchema }), SKUController.creat
 
 ---
 
+## 📄 **Updated Installation Section for README**
+
+Replace the current "Como Executar" section with this enhanced version:
+
+```markdown
+---
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
@@ -159,18 +166,48 @@ router.post('/', validateRequest({ body: CreateSKUSchema }), SKUController.creat
 - **Docker e Docker Compose**
 - **Git**
 
-### Instalação Rápida
+### 🎯 Execução Automática (Recomendado)
+
+Para iniciar **todo o sistema** com um único comando:
 
 ```bash
 # 1. Clone o repositório
 git clone https://github.com/PabloCGSilva/sku-management-boticario.git
 cd sku-management
 
-# 2. Execute o script de inicialização (Windows)
+# 2. Execute o script de inicialização automática
 start-all.bat
 ```
 
-### Execução Manual
+**O que o script faz:**
+
+- ✅ **Inicia a API** em Docker (<http://localhost:3001>)
+- ✅ **Inicia o Frontend** em modo desenvolvimento (<http://localhost:3000>)
+- ✅ **Configura dependências** automaticamente
+- ✅ **Exibe todos os links** importantes
+
+**Após executar, o sistema estará disponível em:**
+
+- 🌐 **Frontend**: <http://localhost:3000>
+- 🔧 **API**: <http://localhost:3001>
+- 📋 **Health Check**: <http://localhost:3001/health>
+- 📚 **Documentação Swagger**: <http://localhost:3001/api-docs>
+
+### 📁 Estrutura do Script
+
+O arquivo `start-all.bat` está localizado na raiz do projeto:
+
+```bat
+sku-management/
+├── start-all.bat        # ← Script de inicialização automática
+├── sku-api/            # Backend API
+├── sku-web/            # Frontend Web
+└── README.md
+```
+
+### ⚙️ Execução Manual (Alternativa)
+
+Se preferir iniciar os serviços manualmente:
 
 #### Backend (API)
 
@@ -203,6 +240,72 @@ npm install
 npm run dev
 ```
 
+### 🛠️ Comandos Úteis
+
+```bash
+# Parar todos os serviços Docker
+cd sku-api
+docker-compose down
+
+# Ver logs da API
+docker-compose logs -f api
+
+# Reinstalar dependências do frontend
+cd sku-web
+rm -rf node_modules package-lock.json
+npm install
+
+# Executar testes
+cd sku-api
+npm run test:all
+```
+
+### 🚨 Resolução de Problemas
+
+#### **Porta 3001 já em uso**
+
+```bash
+# Verificar o que está usando a porta
+netstat -ano | findstr :3001
+
+# Parar containers Docker existentes
+cd sku-api
+docker-compose down
+```
+
+#### **Dependências desatualizadas**
+
+```bash
+# Frontend
+cd sku-web
+npm install
+
+# Backend
+cd sku-api
+npm install
+```
+
+#### **Banco de dados não conecta**
+
+```bash
+# Reiniciar containers Docker
+cd sku-api
+docker-compose down
+docker-compose up --build -d
+```
+
+### 🎯 Acesso Rápido
+
+Após inicialização bem-sucedida:
+
+| Serviço | URL | Descrição |
+|---------|-----|-----------|
+| **Frontend** | <http://localhost:3000> | Interface principal |
+| **API Swagger** | <http://localhost:3001/api-docs> | Documentação interativa |
+| **Health Check** | <http://localhost:3001/health> | Status dos serviços |
+| **API Endpoints** | <http://localhost:3001/api/skus> | Endpoints REST |
+
+> **💡 Dica:** Use o `start-all.bat` para uma experiência **plug-and-play** completa!
 ---
 
 ## 📡 API Endpoints
@@ -224,29 +327,124 @@ npm run dev
 
 ```json
 {
-  "success": false,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Validation failed: description is required",
-    "details": {
-      "details": [
-        {
-          "field": "description",
-          "message": "String must contain at least 1 character(s)",
-          "code": "too_small"
-        }
-      ],
-      "totalErrors": 1
-    }
-  },
-  "meta": {
-    "timestamp": "2024-01-15T10:30:00.000Z",
-    "path": "/api/skus",
-    "method": "POST",
-    "requestId": "req_123456789"
-  }
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed: description is required",
+    "details": {
+      "details": [
+        {
+          "field": "description",
+          "message": "String must contain at least 1 character(s)",
+          "code": "too_small"
+        }
+      ],
+      "totalErrors": 1
+    }
+  },
+  "meta": {
+    "timestamp": "2024-01-15T10:30:00.000Z",
+    "path": "/api/skus",
+    "method": "POST",
+    "requestId": "req_123456789"
+  }
 }
 ```
+
+---
+
+## 🎨 Frontend - Implementação de Regras de Negócio
+
+### ✨ Interface Inteligente com Validação de Regras
+
+A interface web implementa **validação completa das regras de negócio** diretamente na UI, proporcionando uma experiência profissional e intuitiva.
+
+#### **1. Formulário de SKU com Permissões Dinâmicas**
+
+```typescript
+// Lógica de permissões baseada no status
+const getFieldPermissions = (status) => {
+  switch (status) {
+    case 'PRE_CADASTRO': return { description: true, commercialDescription: true, sku: true }
+    case 'CADASTRO_COMPLETO': return { description: false, commercialDescription: true, sku: false }
+    case 'ATIVO': return { description: false, commercialDescription: false, sku: false }
+    // ... outras regras
+  }
+}
+```
+
+**Funcionalidades:**
+
+- ✅ **Campos desabilitados dinamicamente** baseado no status do SKU
+- ✅ **Ícones visuais** (🔒 Lock / ✏️ Edit) indicando permissões
+- ✅ **Avisos de regras de negócio** em tempo real
+- ✅ **Transições de status** apenas para valores permitidos
+- ✅ **Alerta especial** para regra commercialDescription → PRE_CADASTRO
+
+#### **2. Lista de SKUs com Ações Contextuais**
+
+**Permissões por Status:**
+
+| Status | Editar Campos | Excluir | Alterar Status | Observações |
+|--------|---------------|---------|----------------|-------------|
+| **PRE_CADASTRO** | ✅ Todos | ✅ Sim | ✅ → CADASTRO_COMPLETO, CANCELADO | Edição completa |
+| **CADASTRO_COMPLETO** | ✅ Apenas Comercial | ✅ Sim | ✅ → PRE_CADASTRO, ATIVO, CANCELADO | Edição restrita |
+| **ATIVO** | ❌ Nenhum | ❌ Não | ✅ → DESATIVADO | Apenas transição |
+| **DESATIVADO** | ❌ Nenhum | ❌ Não | ✅ → ATIVO, PRE_CADASTRO | Apenas transição |
+| **CANCELADO** | ❌ Nenhum | ❌ Não | ❌ Nenhuma | Status final |
+
+**Funcionalidades da Interface:**
+
+- ✅ **Botões contextuais** - Apenas ações permitidas são exibidas
+- ✅ **Tooltips informativos** - Explicam por que ações estão bloqueadas  
+- ✅ **Ícones semânticos** - 🔒 Bloqueado, 👁️ Visualizar, ✏️ Editar
+- ✅ **Filtros por status** - Com contadores dinâmicos
+- ✅ **Confirmações inteligentes** - Dialogs específicos por contexto
+- ✅ **Status coloridos** - Códigos visuais por estado
+
+#### **3. Feedback Visual Profissional**
+
+```tsx
+// Exemplo de feedback visual
+{commercialDescriptionChanged && (
+  <Alert severity="info">
+    ⚠️ <strong>Regra de Negócio:</strong> Alterar a descrição comercial em 
+    CADASTRO_COMPLETO retornará o SKU para status PRE_CADASTRO automaticamente.
+  </Alert>
+)}
+```
+
+**Elementos de UX:**
+
+- 🎨 **Chips coloridos** para status com cores semânticas
+- 🔔 **Alertas contextuais** explicando regras de negócio
+- 📊 **Contadores em tempo real** de SKUs por status
+- 🎯 **Validação instantânea** com feedback visual
+- 🛡️ **Prevenção de erros** antes do envio ao backend
+
+### 🚀 Tecnologias Frontend Utilizadas
+
+| Tecnologia | Finalidade | Benefício |
+|------------|------------|-----------|
+| **React Hook Form** | Gerenciamento de formulários | Performance e validação |
+| **Zod** | Schema validation | Type safety e regras |
+| **Material-UI** | Design system | Consistência visual |
+| **React Query** | Server state | Cache e sincronização |
+| **TypeScript** | Type safety | Menos bugs e melhor DX |
+
+### 🎖️ Diferencial da Implementação
+
+Esta implementação frontend demonstra:
+
+1. **Conhecimento de Regras de Negócio** - UI reflete exatamente as especificações
+2. **UX Profissional** - Feedback visual e prevenção de erros
+3. **Arquitetura Escalável** - Sistema de permissões reutilizável
+4. **Acessibilidade** - Tooltips, labels e feedback para usuários
+5. **Performance** - Validação client-side reduz requisições desnecessárias
+
+> **Resultado:** Interface que **guia o usuário** através das regras de negócio, **previne erros** e proporciona uma **experiência profissional** alinhada com sistemas empresariais.
+
+---
 
 ## 🧪 Cobertura de Testes
 
@@ -299,9 +497,9 @@ npm run test:integration
 
 **Cenários testados:**
 
-```test
+```
 ✅ Criação de SKU com status inicial PRE_CADASTRO
-✅ Transição PRE_CADASTRO → CADASTRO_COMPLETO  
+✅ Transição PRE_CADASTRO → CADASTRO_COMPLETO  
 ✅ Regra: commercialDescription em CADASTRO_COMPLETO → PRE_CADASTRO
 ✅ Validação de permissões de edição por status
 ✅ Validação de transições inválidas
@@ -338,7 +536,7 @@ npm run test:state-machine
 
 ##### 3.4 Estado DESATIVADO
 
-- ✅ **Nenhuma edição permitida** - todos os campos bloqueados  
+- ✅ **Nenhuma edição permitida** - todos os campos bloqueados  
 - ✅ Transições válidas: `ATIVO`, `PRE_CADASTRO`
 - ✅ Valida rejeição de alterações de campos
 
@@ -359,24 +557,24 @@ npm run test:state-machine
 #### Padrões Profissionais Implementados
 
 1. **Isolamento de Testes**
-   - Cada teste cria seus próprios dados
-   - Cleanup automático após execução
-   - Sem dependências entre testes
+   - Cada teste cria seus próprios dados
+   - Cleanup automático após execução
+   - Sem dependências entre testes
 
 2. **Cobertura de Edge Cases**
-   - Todas as transições de estado possíveis
-   - Validação de campos por status
-   - Cenários de erro e sucesso
+   - Todas as transições de estado possíveis
+   - Validação de campos por status
+   - Cenários de erro e sucesso
 
 3. **Validação de Regras de Negócio**
-   - 100% das regras do desafio técnico
-   - Casos especiais documentados
-   - Comportamentos específicos validados
+   - 100% das regras do desafio técnico
+   - Casos especiais documentados
+   - Comportamentos específicos validados
 
 4. **Assertions Robustas**
-   - Validação de códigos HTTP corretos
-   - Verificação de estrutura de resposta
-   - Contexto detalhado em falhas
+   - Validação de códigos HTTP corretos
+   - Verificação de estrutura de resposta
+   - Contexto detalhado em falhas
 
 ### 📈 Métricas de Cobertura
 
@@ -386,14 +584,14 @@ npm run test:all
 
 # Resultado esperado:
 ✅ Testes Unitários: 100% dos utilitários
-✅ Testes de Integração: 100% dos endpoints  
+✅ Testes de Integração: 100% dos endpoints  
 ✅ Testes de State Machine: 100% das regras de negócio
 ✅ Total: 17+ cenários validados
 ```
 
 ### 🚀 Executando os Testes
 
-#### Pré-requisitos para Execução de Testes
+#### Pré-requisitos
 
 - API rodando em `http://localhost:3001`
 - Banco de dados PostgreSQL ativo
@@ -499,28 +697,28 @@ CORS_ORIGIN="http://localhost:3000"
 
 ```
 src/
-├── controllers/     # Controladores da API (apenas orquestração)
-├── services/        # Lógica de negócio e regras
-├── models/          # Definições de tipos e schemas Zod
-├── routes/          # Definição das rotas com validação
-├── middleware/      # Middlewares (validation, errorHandler)
-├── errors/          # Hierarquia de erros customizada
-├── utils/           # Utilitários e helpers
-├── config/          # Configurações (Swagger, etc)
-└── index.ts         # Entrada da aplicação
+├── controllers/     # Controladores da API (apenas orquestração)
+├── services/        # Lógica de negócio e regras
+├── models/          # Definições de tipos e schemas Zod
+├── routes/          # Definição das rotas com validação
+├── middleware/      # Middlewares (validation, errorHandler)
+├── errors/          # Hierarquia de erros customizada
+├── utils/           # Utilitários e helpers
+├── config/          # Configurações (Swagger, etc)
+└── index.ts         # Entrada da aplicação
 ```
 
-### Frontend structure (sku-web)
+### Frontend  (sku-web)
 
-```
+```structure
 src/
-├── components/      # Componentes reutilizáveis
-├── pages/           # Páginas da aplicação
-├── hooks/           # Custom hooks (React Query)
-├── services/        # Cliente da API
-├── types/           # Definições de tipos TypeScript
-├── utils/           # Utilitários e validações
-└── App.tsx          # Componente principal
+├── components/      # Componentes reutilizáveis
+├── pages/           # Páginas da aplicação
+├── hooks/           # Custom hooks (React Query)
+├── services/        # Cliente da API
+├── types/           # Definições de tipos TypeScript
+├── utils/           # Utilitários e validações
+└── App.tsx          # Componente principal
 ```
 
 ---
